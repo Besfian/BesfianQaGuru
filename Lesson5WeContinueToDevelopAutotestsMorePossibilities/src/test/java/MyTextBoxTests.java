@@ -1,12 +1,17 @@
 import com.codeborne.selenide.Configuration;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class MyTextBoxTests {
+
+
     @BeforeAll
     static void disclosure() {
         Configuration.startMaximized = true;
@@ -15,55 +20,46 @@ public class MyTextBoxTests {
 
     @Test
     void formTest() {
+
+
+        StudentData faker = new StudentData();
+
         RegistrationsPage registrationsPage = new RegistrationsPage();
         //переход по ссылке
         registrationsPage.openPage(registrationsPage.URL)
 
-        //проверка названия формы automation-practice-form
-        .validateFormTitle()
-        //заполнение
-        .firstNameInput("Test")
-                .firstLastInput("Testov")
-                .emailInput("test@mail.ru")
-                .genderInput(GenderInput.FEMALE)
-                .userNumberInput("9040055515")
+                //проверка названия формы automation-practice-form
+                .validateFormTitle(registrationsPage.formTitle, registrationsPage.FORM_TEXT)
+                //заполнение
+                .firstNameInput(faker.firstName)
+                .lastNameInput(faker.lastName)
+                .emailInput(faker.userEmail)
+                .genderInput(GenderInput.MALE)
+                .userNumberInput("8904775511")
                 .dateOfBirthInput("1990", "February", "7")
-                .hobbiesInput(HobbiesInput.SPORTS, HobbiesInput.MUSIC, HobbiesInput.READING);
+                .hobbiesInput(HobbiesInput.SPORTS, HobbiesInput.READING, HobbiesInput.MUSIC)
+                .subjectsInput("e", "English").pictureInput("Test.jpg")
+                .addressInput(faker.address)
+                .stateAndCityInput("NCR", "Delhi")
+                .submitClick()
 
-        $("#subjectsInput").sendKeys("e");
-        $(byText("English")).click();
+                //Проверяем что перешли в верное модальное окно
+                .validateFormTitle(registrationsPage.modalTitle, registrationsPage.MODAL_TEXT)
 
-        $("#uploadPicture").uploadFromClasspath("Test.jpg");
 
-        $("#currentAddress").setValue("Testik");
-
-        $(byText("Select State")).scrollTo().click();
-        $(byText("NCR")).click();
-        $(byText("Select City")).click();
-        $(byText("Delhi")).click();
-
-        $("#submit").scrollTo().click();
-
-        //Проверяем что перешли в верное модальное окно
-        $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
-
-        parent("Student Name", "Test Testov");
-        parent("Student Email", "test@mail.ru");
-        parent("Gender", "Male");
-        parent("Mobile", "9040055515");
-        parent("Date of Birth", "07 February,1990");
-        parent("Subjects", "English");
-        parent("Hobbies", "Sports, Reading, Music");
-        parent("Picture", "Test.jpg");
-        parent("Address", "Testik");
-        parent("State and City", "NCR Delhi");
+                //сравнение данных
+                .parent("Student Name", faker.firstName + " " + faker.lastName)
+                .parent("Student Email", faker.userEmail)
+                .parent("Gender", "Male")
+                .parent("Mobile", "8904775511")
+                .parent("Date of Birth", "07 February,1990")
+                .parent("Subjects", "English")
+                .parent("Hobbies", "Sports, Reading, Music")
+                .parent("Picture", "Test.jpg")
+                .parent("Address", faker.address)
+                .parent("State and City", "NCR Delhi");
 
         sleep(5000);
-    }
-
-
-    void parent(String key, String meaning) {
-        $(".table-responsive").$(byText(key)).parent().shouldHave(text(meaning));
     }
 
 

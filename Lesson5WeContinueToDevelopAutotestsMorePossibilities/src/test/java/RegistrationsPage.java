@@ -1,4 +1,5 @@
 import com.codeborne.selenide.SelenideElement;
+import com.github.javafaker.Name;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
@@ -7,52 +8,55 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class RegistrationsPage {
     public final String URL = "https://demoqa.com/automation-practice-form";
-    private final String FORM_TITLE = "Student Registration Form";
-    private SelenideElement
+    public final String FORM_TEXT = "Student Registration Form";
+    public final String MODAL_TEXT = "Thanks for submitting the form";
+    public SelenideElement
             formTitle = $(".practice-form-wrapper"),
+            modalTitle = $("#example-modal-sizes-title-lg");
+    private SelenideElement
             formFirstNameInput = $("#firstName"),
             formLastNameInput = $("#lastName"),
-            formEMAILInput = $("#userEmail"),
+            formEmailInput = $("#userEmail"),
             formUserNumberInput = $("#userNumber"),
             formDateOfBirthInput = $("#dateOfBirthInput"),
+            formSubmit = $("#submit"),
+            formSubjectsInput = $("#subjectsInput"),
+            formUploadPictureInput = $("#uploadPicture"),
+            formCurrentAddressInput = $("#currentAddress");
 
-    formResultsTable = $(".table-responsive");
+
+    public SelenideElement formResultsTable = $(".table-responsive");
 
     public RegistrationsPage openPage(String URL) {
         open(URL);
         return this;
     }
 
-    public RegistrationsPage validateFormTitle() {
-        formTitle.shouldHave(text(FORM_TITLE));
+    public RegistrationsPage validateFormTitle(SelenideElement FORM, String TEXT) {
+        FORM.shouldHave(text(TEXT));
         return this;
     }
 
-    //ввод firstName
     public RegistrationsPage firstNameInput(String firstName) {
         formFirstNameInput.setValue(firstName);
         return this;
     }
 
-    //ввод lastName
-    public RegistrationsPage firstLastInput(String lastName) {
+    public RegistrationsPage lastNameInput(String lastName) {
         formLastNameInput.setValue(lastName);
         return this;
     }
 
-    //ввод email
     public RegistrationsPage emailInput(String email) {
-        formEMAILInput.setValue(email);
+        formEmailInput.setValue(email);
         return this;
     }
 
-    //ввод userNumber
     public RegistrationsPage userNumberInput(String userNumber) {
         formUserNumberInput.setValue(userNumber);
         return this;
     }
 
-    //ввод dateOfBirth
     public RegistrationsPage dateOfBirthInput(String year, String month, String day) {
 
         formDateOfBirthInput.click();
@@ -88,4 +92,44 @@ public class RegistrationsPage {
         $(gender.getSelector()).click();
         return this;
     }
+
+    public RegistrationsPage subjectsInput(String subjects, String fullSubjects) {
+
+        formSubjectsInput.sendKeys(subjects);
+        $(byText(fullSubjects)).click();
+        return this;
+    }
+
+    public RegistrationsPage pictureInput(String picture) {
+
+        formUploadPictureInput.uploadFromClasspath(picture);
+        return this;
+    }
+
+    public RegistrationsPage addressInput(String address) {
+
+        formCurrentAddressInput.setValue(address);
+        return this;
+    }
+
+    public RegistrationsPage stateAndCityInput(String state, String city) {
+
+        $(byText("Select State")).scrollTo().click();
+        $(byText(state)).click();
+        $(byText("Select City")).click();
+        $(byText(city)).click();
+        return this;
+    }
+
+    public RegistrationsPage submitClick() {
+
+        formSubmit.scrollTo().click();
+        return this;
+    }
+
+    RegistrationsPage parent(String key, String meaning) {
+        $(".table-responsive").$(byText(key)).parent().shouldHave(text(meaning));
+        return this;
+    }
+
 }
