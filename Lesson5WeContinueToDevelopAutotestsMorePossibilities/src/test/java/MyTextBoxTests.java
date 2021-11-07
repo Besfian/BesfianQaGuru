@@ -59,7 +59,7 @@ public class MyTextBoxTests {
                 .parent("Address", faker.address)
                 .parent("State and City", "NCR Delhi");
 
-        sleep(5000);
+//        sleep(5000);
     }
 
 
