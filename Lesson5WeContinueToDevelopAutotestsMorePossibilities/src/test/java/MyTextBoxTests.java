@@ -25,7 +25,7 @@ public class MyTextBoxTests {
         .firstNameInput("Test")
                 .firstLastInput("Testov")
                 .emailInput("test@mail.ru")
-                .genderInput(Gender.FEMALE)
+                .genderInput(GenderInput.FEMALE)
                 .userNumberInput("9040055515")
                 .dateOfBirthInput("1990", "February", "7")
                 .hobbiesInput(HobbiesInput.SPORTS, HobbiesInput.MUSIC, HobbiesInput.READING);

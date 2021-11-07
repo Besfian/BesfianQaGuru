@@ -83,7 +83,7 @@ public class RegistrationsPage {
         return this;
     }
 
-    public RegistrationsPage genderInput(Gender gender) {
+    public RegistrationsPage genderInput(GenderInput gender) {
 
         $(gender.getSelector()).click();
         return this;
