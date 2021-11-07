@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class MyTextBoxTests {
     @BeforeAll
@@ -16,34 +15,33 @@ public class MyTextBoxTests {
 
     @Test
     void formTest() {
+        RegistrationsPage registrationsPage = new RegistrationsPage();
         //переход по ссылке
-        open("https://demoqa.com/automation-practice-form");
-        //проверка формы
-        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+        registrationsPage.openPage(registrationsPage.URL)
 
+        //проверка названия формы automation-practice-form
+        .validateFormTitle()
         //заполнение
-        $("[id=firstName]").setValue("Test");
-        $("#lastName").setValue("Testov");
-        $("#userEmail").setValue("test@mail.ru");
-        $(".custom-control-label").click();
-        $("#userNumber").setValue("9040055515");
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__year-select").click();
-        $(byText("1990")).click();
-        $(".react-datepicker__month-select").click();
-        $(byText("February")).click();
-        $(byText("7")).click();
+        .firstNameInput("Test")
+                .firstLastInput("Testov")
+                .emailInput("test@mail.ru")
+                .genderInput(Gender.FEMALE)
+                .userNumberInput("9040055515")
+                .dateOfBirthInput("1990", "February", "7")
+                .hobbiesInput(HobbiesInput.SPORTS, HobbiesInput.MUSIC, HobbiesInput.READING);
+
         $("#subjectsInput").sendKeys("e");
         $(byText("English")).click();
-        $(byText("Sports")).click();
-        $(byText("Reading")).click();
-        $(byText("Music")).click();
+
         $("#uploadPicture").uploadFromClasspath("Test.jpg");
+
         $("#currentAddress").setValue("Testik");
+
         $(byText("Select State")).scrollTo().click();
         $(byText("NCR")).click();
         $(byText("Select City")).click();
         $(byText("Delhi")).click();
+
         $("#submit").scrollTo().click();
 
         //Проверяем что перешли в верное модальное окно
@@ -60,7 +58,7 @@ public class MyTextBoxTests {
         parent("Address", "Testik");
         parent("State and City", "NCR Delhi");
 
-
+        sleep(5000);
     }
 
 
